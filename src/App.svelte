@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   type Layout = "top-bottom" | "side-by-side";
   let text: string = `
   وَمِنْهَا بَيَانُ الْقَوْلَيْنِ وَالْوَجْهَيْنِ وَالطَّرِيقَيْنِ وَالنَّصِّ وَمَرَاتِبِ الْخِلَافِ فِي جَمِيعِ الْحَالَاتِ فَحَيْثُ أَقُولُ فِي الْأَظْهَرِ أَوْ الْمَشْهُورِ فَمِنْ الْقَوْلَيْنِ أَوْ الْأَقْوَالِ فَإِنْ قَوِيَ الْخِلَافُ قُلْت الْأَظْهَرُ  وَإِلَّا فَالْمَشْهُورُ  وَحَيْثُ أَقُولُ الْأَصَحُّ أَوْ الصَّحِيحُ فَمِنْ الْوَجْهَيْنِ أَوْ الْأَوْجُهِ  فَإِنْ قَوِيَ الْخِلَافُ قُلْت الْأَصَحُّ وَإِلَّا فَالصَّحِيحُ وَحَيْثُ أَقُولُ الْمَذْهَبُ فَمِنْ الطَّرِيقَيْنِ أَوْ الطُّرُقِ وَحَيْثُ أَقُولُ النَّصُّ فَهُوَ نَصُّ الشَّافِعِيِّ رَحِمَهُ اللَّهُ وَيَكُونُ هُنَاكَ  وَجْهٌ ضَعِيفٌ أَوْ قَوْلٌ مُخَرَّجٌ وَحَيْثُ أَقُولُ الْجَدِيدُ فَالْقَدِيمُ خِلَافُهُ أَوْ الْقَدِيمُ أَوْ فِي قَوْلٍ قَدِيمٍ فَالْجَدِيدُ خِلَافُهُ وَحَيْثُ أَقُولُ: وَقِيلَ كَذَا، فَهُوَ وَجْهٌ ضَعِيفٌ، وَالصَّحِيحُ أَوْ الْأَصَحُّ خِلَافُهُ وَحَيْثُ أَقُولُ: وَفِي قَوْلٍ كَذَا فَالرَّاجِحُ خِلَافُهُ 
@@ -10,15 +11,16 @@
     `,
   };
   let searchTerm = "";
-  let selectedCommentaryKey = "mahalli";
-  let selectedLayout = "top-bottom";
-
+  let selectedCommentaryKey = "";
+  let selectedLayout: Layout = "top-bottom";
+  let slideIn = false;
   function _onSelectCommentary(e: { currentTarget: { value: any } }) {
     selectedCommentaryKey = e.currentTarget.value;
   }
 
   function _onSelectLayout(e: { currentTarget: { value: any } }) {
     selectedLayout = e.currentTarget.value;
+    slideIn = true;
   }
 </script>
 
@@ -39,10 +41,10 @@
         <option value="side-by-side">side by side</option>
       </select>
     </div>
-    <div class={`text-container ${selectedLayout}`}>
-      <p class="text">{text}</p>
+    <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
+      <p transition:fade class="text">{text}</p>
       {#if selectedCommentaryKey && commentary["key"] === selectedCommentaryKey}
-        <div class="commentary">
+        <div transition:fade class="commentary">
           <p>{commentary["text"]}</p>
         </div>
       {/if}
@@ -106,17 +108,35 @@
     animation: 0.5s slideinTopBottom ease;
   }
 
-  /* @keyframes slideinDefault {
-      ${MainApp.slideAnimation}
+  @keyframes slideinDefault {
+    from {
+      opacity: 0;
     }
-
-    @keyframes slideinSideBySide {
-     ${MainApp.slideAnimation}
+    to {
+      visibility: visible;
+      opacity: 1;
     }
+  }
 
-    @keyframes slideinTopBottom {
-      ${MainApp.slideAnimation}
-    }*/
+  @keyframes slideinSideBySide {
+    from {
+      opacity: 0;
+    }
+    to {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideinTopBottom {
+    from {
+      opacity: 0;
+    }
+    to {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 
   .text-container.side-by-side {
     grid-template-columns: auto auto;
