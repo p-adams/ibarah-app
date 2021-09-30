@@ -46,7 +46,9 @@
       </select>
     </div>
     <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
-      <p transition:fade class="text">{text}</p>
+      {#if selectedLayout !== "integrated"}
+        <p transition:fade class="text">{text}</p>
+      {/if}
       {#if selectedCommentaryKey && commentary["key"] === selectedCommentaryKey}
         <div transition:fade class="commentary">
           <p>{commentary["text"]}</p>
@@ -102,6 +104,9 @@
     direction: rtl;
     font-size: 24px;
     color: black;
+  }
+  .text-container.integrated .commentary {
+    border: unset;
   }
   .text-container.side-by-side.slidin {
     animation: 0.75s slideinSideBySide ease;
