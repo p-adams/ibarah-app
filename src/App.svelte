@@ -33,23 +33,28 @@
 <main>
   <div class="main-app">
     <div class="filter-bar">
-      <input placeholder="search" bind:value={searchTerm} />
-      <select
-        on:change={(e) => _onSelectCommentary(e)}
-        bind:value={selectedCommentaryKey}
-      >
-        <option value="none">commentaries</option>
-        <!--<option value="tuhfah">Tuhfat al-Muhtaj</option>
+      <div class="input-group">
+        <input placeholder="search" bind:value={searchTerm} />
+        <select
+          on:change={(e) => _onSelectCommentary(e)}
+          bind:value={selectedCommentaryKey}
+        >
+          <option value="none">commentaries</option>
+          <!--<option value="tuhfah">Tuhfat al-Muhtaj</option>
         <option value="nihayah">Nihayat al-Muhtaj</option>
         <option value="mughni">Mughni -l al-Muhtaj</option>-->
-        <option value="mahalli">Kanz al-Raghibin</option>
-      </select>
-      <select on:change={(e) => _onSelectLayout(e)} bind:value={selectedLayout}>
-        <option value="layout">layout</option>
-        <option value="top-bottom">top bottom</option>
-        <option value="side-by-side">side by side</option>
-        <option value="integrated">integrated</option>
-      </select>
+          <option value="mahalli">Kanz al-Raghibin</option>
+        </select>
+        <select
+          on:change={(e) => _onSelectLayout(e)}
+          bind:value={selectedLayout}
+        >
+          <option value="layout">layout</option>
+          <option value="top-bottom">top bottom</option>
+          <option value="side-by-side">side by side</option>
+          <option value="integrated">integrated</option>
+        </select>
+      </div>
     </div>
     <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
       {#if selectedLayout !== "integrated"}
@@ -68,6 +73,7 @@
   :root {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    --section-padding: 4px;
   }
 
   main {
@@ -82,16 +88,26 @@
     margin: 0 auto;
   }
   .filter-bar {
+    height: 108px;
+    box-sizing: border-box;
+    border-bottom: 1px solid gray;
+  }
+  .input-group {
     width: 100%;
-    height: 35px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding: var(--section-padding);
   }
   .filter-bar input {
+    height: 30px;
     margin: 0 4px 0 4px;
     flex: 1.5;
   }
   .filter-bar select {
+    max-width: 250px;
+    height: 36px;
     margin: 0 4px 0 4px;
     flex: 1;
   }
@@ -99,7 +115,6 @@
     display: grid;
     grid-template-columns: auto;
     padding: 20px;
-    border-top: 1px solid lightgray;
     direction: rtl;
     animation: 1s slideinDefault ease;
   }
