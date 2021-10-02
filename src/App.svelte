@@ -14,6 +14,7 @@
   let selectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
   let slideIn = false;
+
   function _onSelectCommentary(e: { currentTarget: { value: any } }) {
     selectedCommentaryKey = e.currentTarget.value;
   }
@@ -49,9 +50,9 @@
       {#if selectedLayout !== "integrated"}
         <p transition:fade class="text">{text}</p>
       {/if}
-      {#if selectedCommentaryKey && commentary["key"] === selectedCommentaryKey}
+      {#if selectedCommentaryKey && commentary.key === selectedCommentaryKey}
         <div transition:fade class="commentary">
-          <p>{commentary["text"]}</p>
+          <p>{commentary.text}</p>
         </div>
       {/if}
     </div>
