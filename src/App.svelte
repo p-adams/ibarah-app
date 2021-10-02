@@ -1,6 +1,7 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  type Layout = "top-bottom" | "side-by-side" | "integrated";
+  type Layout = "layout" | "top-bottom" | "side-by-side" | "integrated";
+  type SelectedCommentaryKey = "none" | "mahalli";
   let text: string = `
   وَمِنْهَا بَيَانُ الْقَوْلَيْنِ وَالْوَجْهَيْنِ وَالطَّرِيقَيْنِ وَالنَّصِّ وَمَرَاتِبِ الْخِلَافِ فِي جَمِيعِ الْحَالَاتِ فَحَيْثُ أَقُولُ فِي الْأَظْهَرِ أَوْ الْمَشْهُورِ فَمِنْ الْقَوْلَيْنِ أَوْ الْأَقْوَالِ فَإِنْ قَوِيَ الْخِلَافُ قُلْت الْأَظْهَرُ  وَإِلَّا فَالْمَشْهُورُ  وَحَيْثُ أَقُولُ الْأَصَحُّ أَوْ الصَّحِيحُ فَمِنْ الْوَجْهَيْنِ أَوْ الْأَوْجُهِ  فَإِنْ قَوِيَ الْخِلَافُ قُلْت الْأَصَحُّ وَإِلَّا فَالصَّحِيحُ وَحَيْثُ أَقُولُ الْمَذْهَبُ فَمِنْ الطَّرِيقَيْنِ أَوْ الطُّرُقِ وَحَيْثُ أَقُولُ النَّصُّ فَهُوَ نَصُّ الشَّافِعِيِّ رَحِمَهُ اللَّهُ وَيَكُونُ هُنَاكَ  وَجْهٌ ضَعِيفٌ أَوْ قَوْلٌ مُخَرَّجٌ وَحَيْثُ أَقُولُ الْجَدِيدُ فَالْقَدِيمُ خِلَافُهُ أَوْ الْقَدِيمُ أَوْ فِي قَوْلٍ قَدِيمٍ فَالْجَدِيدُ خِلَافُهُ وَحَيْثُ أَقُولُ: وَقِيلَ كَذَا، فَهُوَ وَجْهٌ ضَعِيفٌ، وَالصَّحِيحُ أَوْ الْأَصَحُّ خِلَافُهُ وَحَيْثُ أَقُولُ: وَفِي قَوْلٍ كَذَا فَالرَّاجِحُ خِلَافُهُ 
   `;
@@ -11,12 +12,16 @@
     `,
   };
   let searchTerm = "";
-  let selectedCommentaryKey = "mahalli";
+  let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
   let slideIn = false;
 
   function _onSelectCommentary(e: { currentTarget: { value: any } }) {
     selectedCommentaryKey = e.currentTarget.value;
+    // reset to default layout if no commentary is selected
+    if (selectedCommentaryKey === "none") {
+      selectedLayout = "layout";
+    }
   }
 
   function _onSelectLayout(e: { currentTarget: { value: any } }) {
@@ -33,14 +38,14 @@
         on:change={(e) => _onSelectCommentary(e)}
         bind:value={selectedCommentaryKey}
       >
-        <option>commentaries</option>
+        <option value="none">commentaries</option>
         <!--<option value="tuhfah">Tuhfat al-Muhtaj</option>
         <option value="nihayah">Nihayat al-Muhtaj</option>
         <option value="mughni">Mughni -l al-Muhtaj</option>-->
         <option value="mahalli">Kanz al-Raghibin</option>
       </select>
-      <select on:change={(e) => _onSelectLayout(e)}>
-        <option>layout</option>
+      <select on:change={(e) => _onSelectLayout(e)} bind:value={selectedLayout}>
+        <option value="layout">layout</option>
         <option value="top-bottom">top bottom</option>
         <option value="side-by-side">side by side</option>
         <option value="integrated">integrated</option>
