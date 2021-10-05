@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   import { fade } from "svelte/transition";
   type Layout = "layout" | "top-bottom" | "side-by-side" | "integrated";
   type SelectedCommentaryKey = "none" | "mahalli";
@@ -11,6 +13,7 @@
     (وَمِنْهَا بَيَانُ الْقَوْلَيْنِ وَالْوَجْهَيْنِ وَالطَّرِيقَيْنِ وَالنَّصِّ وَمَرَاتِبِ الْخِلَافِ) قُوَّةً وَضَعْفًا فِي الْمَسَائِلِ (فِي جَمِيعِ الْحَالَاتِ) بِخِلَافِ الْمُحَرَّرِ فَتَارَةً يُبَيِّنُ نَحْوَ أَصَحِّ الْقَوْلَيْنِ وَأَظْهَرِ الْوَجْهَيْنِ، وَتَارَةً لَا يُبَيِّنُ نَحْوَ الْأَصَحِّ وَالْأَظْهَرِ (فَحَيْثُ أَقُولُ فِي الْأَظْهَرِ أَوْ الْمَشْهُورِ فَمِنْ الْقَوْلَيْنِ أَوْ الْأَقْوَالِ) لِلشَّافِعِيِّ رَضِيَ اللَّهُ عَنْهُ (فَإِنْ قَوِيَ الْخِلَافُ) لِقُوَّةِ مُدْرَكِهِ (قُلْت الْأَظْهَرُ) الْمُشْعِرُ بِظُهُورِ مُقَابِلِهِ (وَإِلَّا فَالْمَشْهُورُ) الْمُشْعِرُ بِغَرَابَةِ مُقَابِلِهِ لِضَعْفِ مُدْرَكِهِ. (وَحَيْثُ أَقُولُ الْأَصَحُّ أَوْ الصَّحِيحُ فَمِنْ الْوَجْهَيْنِ أَوْ الْأَوْجُهِ) لِلْأَصْحَابِ يَسْتَخْرِجُونَهَا مِنْ كَلَامِ الشَّافِعِيِّ رَضِيَ اللَّهُ عَنْهُ (فَإِنْ قَوِيَ الْخِلَافُ قُلْت الْأَصَحُّ وَإِلَّا فَالصَّحِيحُ) وَلَمْ يُعَبِّرْ بِذَلِكَ فِي الْأَقْوَالِ تَأَدُّبًا مَعَ الْإِمَامِ الشَّافِعِيِّ رَضِيَ اللَّهُ عَنْهُ كَمَا قَالَ، فَإِنَّ الصَّحِيحَ مِنْهُ مُشْعِرٌ بِفَسَادِ مُقَابِلِهِ. (وَحَيْثُ أَقُولُ الْمَذْهَبُ فَمِنْ الطَّرِيقَيْنِ أَوْ الطُّرُقِ) وَهِيَ اخْتِلَافُ الْأَصْحَابِ فِي حِكَايَةِ الْمَذْهَبِ كَأَنْ يَحْكِيَ بَعْضُهُمْ فِي الْمَسْأَلَةِ قَوْلَيْنِ أَوْ وَجْهَيْنِ لِمَنْ تَقَدَّمَ، وَيَقْطَعَ بَعْضُهُمْ بِأَحَدِهِمَا ثُمَّ الرَّاجِحُ الَّذِي عَبَّرَ عَنْهُ بِالْمَذْهَبِ إمَّا طَرِيقُ الْقَطْعِ أَوْ الْمُوَافِقِ لَهَا مِنْ طَرِيقِ الْخِلَافِ أَوْ الْمُخَالِفِ لَهَا كَمَا سَيَظْهَرُ فِي الْمَسَائِلِ، وَمَا قِيلَ مِنْ أَنَّ مُرَادَهُ الْأَوَّلُ وَأَنَّهُ الْأَغْلَبُ مَمْنُوعٌ (وَحَيْثُ أَقُولُ النَّصُّ فَهُوَ نَصُّ الشَّافِعِيِّ رَحِمَهُ اللَّهُ وَيَكُونُ هُنَاكَ) أَيْ مُقَابِلُهُ (وَجْهٌ ضَعِيفٌ أَوْ قَوْلٌ مُخَرَّجٌ) مِنْ نَصٍّ لَهُ فِي نَظِيرِ الْمَسْأَلَةِ لَا يُعْمَلُ بِهِ. (وَحَيْثُ أَقُولُ الْجَدِيدُ فَالْقَدِيمُ خِلَافُهُ أَوْ الْقَدِيمُ أَوْ فِي قَوْلٍ قَدِيمٍ فَالْجَدِيدُ خِلَافُهُ). وَالْقَدِيمُ مَا قَالَهُ الشَّافِعِيُّ رَضِيَ اللَّهُ عَنْهُ بِالْعِرَاقِ، وَالْجَدِيدُ مَا قَالَهُ بِمِصْرِ، وَالْعَمَلُ عَلَيْهِ إلَّا فِيمَا يُنَبِّهُ عَلَيْهِ كَامْتِدَادِ وَقْتِ الْمَغْرِبِ إلَى مَغِيبِ الشَّفَقِ الْأَحْمَرِ فِي الْقَدِيمِ كَمَا سَيَأْتِي. (وَحَيْثُ أَقُولُ: وَقِيلَ كَذَا، فَهُوَ وَجْهٌ ضَعِيفٌ، وَالصَّحِيحُ أَوْ الْأَصَحُّ خِلَافُهُ وَحَيْثُ أَقُولُ: وَفِي قَوْلٍ كَذَا فَالرَّاجِحُ خِلَافُهُ) وَيَتَبَيَّنُ قُوَّةُ الْخِلَافِ وَضَعْفُهُ مِنْ مُدْرَكِهِ
     `,
   };
+  let searchFilter: HTMLInputElement;
   let searchTerm = "";
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
@@ -28,13 +31,23 @@
     selectedLayout = e.currentTarget.value;
     slideIn = true;
   }
+  onMount(() => {
+    searchFilter.focus();
+  });
 </script>
 
 <main>
   <div class="main-app">
     <div class="filter-bar">
       <div class="input-group">
-        <input placeholder="search" bind:value={searchTerm} />
+        <div class="search-filter">
+          <input
+            bind:this={searchFilter}
+            placeholder="search"
+            bind:value={searchTerm}
+          />
+          <span class="search-icon"> <i class="fas fa-search" /></span>
+        </div>
         <select
           on:change={(e) => _onSelectCommentary(e)}
           bind:value={selectedCommentaryKey}
@@ -100,12 +113,27 @@
     box-sizing: border-box;
     padding: var(--section-padding);
   }
-  .filter-bar input {
-    height: 30px;
-    margin: 0 4px 0 4px;
+  .filter-bar .search-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 4px;
     flex: 1.5;
   }
+  .filter-bar .search-icon {
+    margin-right: 4px;
+    color: #4791db;
+  }
+  .filter-bar .search-filter input {
+    height: 30px;
+    width: 100%;
+    margin: 0 4px 0 4px;
+    border: none;
+  }
   .filter-bar select {
+    background-color: white;
+    border: 1px solid lightgray;
     max-width: 250px;
     height: 36px;
     margin: 0 4px 0 4px;
@@ -116,7 +144,11 @@
     grid-template-columns: auto;
     padding: 20px;
     direction: rtl;
+
     animation: 1s slideinDefault ease;
+  }
+  .text-container.kuning {
+    background-color: #d9c389;
   }
   .text-container p {
     line-height: 161.8%;
@@ -124,7 +156,7 @@
     padding: 0;
     direction: rtl;
     font-size: 24px;
-    color: black;
+    color: #424242;
   }
   .text-container.integrated .commentary {
     border: unset;
