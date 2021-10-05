@@ -14,12 +14,16 @@
     `,
   };
   let searchFilter: HTMLInputElement;
-  let searchTerm = "";
+  let searchTerm = "القولين";
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
   let slideIn = false;
 
-  function _onSelectCommentary(e: { currentTarget: { value: any } }) {
+  onMount(() => {
+    searchFilter.focus();
+  });
+
+  function onSelectCommentary(e: { currentTarget: { value: any } }) {
     selectedCommentaryKey = e.currentTarget.value;
     // reset to default layout if no commentary is selected
     if (selectedCommentaryKey === "none") {
@@ -27,13 +31,25 @@
     }
   }
 
-  function _onSelectLayout(e: { currentTarget: { value: any } }) {
+  function onSelectLayout(e: { currentTarget: { value: any } }) {
     selectedLayout = e.currentTarget.value;
     slideIn = true;
   }
-  onMount(() => {
-    searchFilter.focus();
-  });
+  function onSearch() {
+    const textWithoutDiacritics = text.replace(
+      /([^\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z 0-9])/g,
+      ""
+    );
+    const searchTermIndex = textWithoutDiacritics.indexOf(searchTerm);
+    if (searchTermIndex != -1) {
+      const match = textWithoutDiacritics.substring(
+        searchTermIndex,
+        searchTermIndex + searchTerm.length
+      );
+    } else {
+      return;
+    }
+  }
 </script>
 
 <main>
@@ -46,10 +62,12 @@
             placeholder="search"
             bind:value={searchTerm}
           />
-          <span class="search-icon"> <i class="fas fa-search" /></span>
+          <span class="search-icon" on:click={() => onSearch()}>
+            <i class="fas fa-search" /></span
+          >
         </div>
         <select
-          on:change={(e) => _onSelectCommentary(e)}
+          on:change={(e) => onSelectCommentary(e)}
           bind:value={selectedCommentaryKey}
         >
           <option value="none">commentaries</option>
@@ -59,7 +77,7 @@
           <option value="mahalli">Kanz al-Raghibin</option>
         </select>
         <select
-          on:change={(e) => _onSelectLayout(e)}
+          on:change={(e) => onSelectLayout(e)}
           bind:value={selectedLayout}
         >
           <option value="layout">layout</option>
@@ -118,7 +136,7 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid lightgray;
-    border-radius: 4px;
+    border-radius: 2px;
     flex: 1.5;
   }
   .filter-bar .search-icon {
