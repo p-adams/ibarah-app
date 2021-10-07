@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-
   import { fade } from "svelte/transition";
+  import { textWithoutDiacritics } from "./helpers";
   type Layout = "layout" | "top-bottom" | "side-by-side" | "integrated";
   type SelectedCommentaryKey = "none" | "mahalli";
   let text: string = `
@@ -14,10 +14,12 @@
     `,
   };
   let searchFilter: HTMLInputElement;
-  let searchTerm = "القولين";
+  let searchTerm = "الصحيح";
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
   let slideIn = false;
+  $: processedText = textWithoutDiacritics(text);
+  $: processedCommentary = textWithoutDiacritics(commentary.text);
 
   onMount(() => {
     searchFilter.focus();
@@ -36,16 +38,16 @@
     slideIn = true;
   }
   function onSearch() {
-    const textWithoutDiacritics = text.replace(
-      /([^\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z 0-9])/g,
-      ""
-    );
-    const searchTermIndex = textWithoutDiacritics.indexOf(searchTerm);
-    if (searchTermIndex != -1) {
-      const match = textWithoutDiacritics.substring(
-        searchTermIndex,
-        searchTermIndex + searchTerm.length
-      );
+    const searchTermIndex = processedText.indexOf(searchTerm);
+    if (searchTermIndex > -1) {
+      processedText = processedText
+        .split(" ")
+        .map((el) =>
+          el.includes(searchTerm)
+            ? `<span style="color: #4791db;">${el}</span>`
+            : el
+        )
+        .join(" ");
     } else {
       return;
     }
@@ -89,11 +91,11 @@
     </div>
     <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
       {#if selectedLayout !== "integrated"}
-        <p transition:fade class="text">{text}</p>
+        <p transition:fade class="text">{@html processedText}</p>
       {/if}
       {#if selectedCommentaryKey && commentary.key === selectedCommentaryKey}
         <div transition:fade class="commentary">
-          <p>{commentary.text}</p>
+          <p>{processedCommentary}</p>
         </div>
       {/if}
     </div>
