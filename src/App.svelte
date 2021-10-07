@@ -14,12 +14,11 @@
     `,
   };
   let searchFilter: HTMLInputElement;
-  let searchTerm = "الصحيح";
+  let searchTerm = "";
+  let searchResults = null;
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
   let slideIn = false;
-  $: processedText = textWithoutDiacritics(text);
-  $: processedCommentary = textWithoutDiacritics(commentary.text);
 
   onMount(() => {
     searchFilter.focus();
@@ -38,12 +37,18 @@
     slideIn = true;
   }
   function onSearch() {
-    const searchTermIndex = processedText.indexOf(searchTerm);
+    // search term with diacritics removes
+    const pSearchTerm = textWithoutDiacritics(searchTerm);
+    if (pSearchTerm === "") {
+      searchResults = null;
+      return;
+    }
+    const searchTermIndex = textWithoutDiacritics(text).indexOf(pSearchTerm);
     if (searchTermIndex > -1) {
-      processedText = processedText
+      searchResults = text
         .split(" ")
         .map((el) =>
-          el.includes(searchTerm)
+          textWithoutDiacritics(el).includes(pSearchTerm)
             ? `<span style="color: #4791db;">${el}</span>`
             : el
         )
@@ -91,11 +96,17 @@
     </div>
     <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
       {#if selectedLayout !== "integrated"}
-        <p transition:fade class="text">{@html processedText}</p>
+        <p transition:fade class="text">
+          {#if !searchResults}
+            {text}
+          {:else}
+            {@html searchResults}
+          {/if}
+        </p>
       {/if}
       {#if selectedCommentaryKey && commentary.key === selectedCommentaryKey}
         <div transition:fade class="commentary">
-          <p>{processedCommentary}</p>
+          <p>{commentary.text}</p>
         </div>
       {/if}
     </div>
