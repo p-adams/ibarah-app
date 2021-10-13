@@ -10,7 +10,9 @@
   let searchResults = null;
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
+  let selectedTerminology = "none";
   let slideIn = false;
+  // console.log(textWithoutDiacritics(text));
 
   onMount(() => {
     searchFilter.focus();
@@ -49,6 +51,9 @@
       return;
     }
   }
+  function onSelectTerminology(e: { currentTarget: { value: any } }) {
+    selectedTerminology = e.currentTarget.value;
+  }
 </script>
 
 <main>
@@ -83,6 +88,16 @@
           <option value="top-bottom">top bottom</option>
           <option value="side-by-side">side by side</option>
           <option value="integrated">integrated</option>
+        </select>
+      </div>
+      <div>
+        <select
+          on:change={(e) => onSelectTerminology(e)}
+          bind:value={selectedTerminology}
+        >
+          <option value="none">key terminology</option>
+          <option value="adhhar">الأظهر</option>
+          <option value="mashhur">المشهور</option>
         </select>
       </div>
     </div>
