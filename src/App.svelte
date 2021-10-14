@@ -12,7 +12,6 @@
   let selectedLayout: Layout = "top-bottom";
   let selectedTerminology = "none";
   let slideIn = false;
-  // console.log(textWithoutDiacritics(text));
 
   onMount(() => {
     searchFilter.focus();
