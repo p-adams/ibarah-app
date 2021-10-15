@@ -10,7 +10,6 @@
   let searchResults = null;
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
-  let selectedTerminology = "none";
   let slideIn = false;
 
   onMount(() => {
@@ -50,9 +49,6 @@
       return;
     }
   }
-  function onSelectTerminology(e: { currentTarget: { value: any } }) {
-    selectedTerminology = e.currentTarget.value;
-  }
 </script>
 
 <main>
@@ -89,15 +85,10 @@
           <option value="integrated">integrated</option>
         </select>
       </div>
-      <div>
-        <select
-          on:change={(e) => onSelectTerminology(e)}
-          bind:value={selectedTerminology}
-        >
-          <option value="none">key terminology</option>
-          <option value="adhhar">الأظهر</option>
-          <option value="mashhur">المشهور</option>
-        </select>
+      <div class="terminology-checkbox-group">
+        <span>key terminology</span>
+        <label for="adhhar"> الأظهر <input type="checkbox" /></label>
+        <label for="mashhur"> المشهور <input type="checkbox" /></label>
       </div>
     </div>
     <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
