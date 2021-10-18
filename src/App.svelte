@@ -86,9 +86,11 @@
         </select>
       </div>
       <div class="terminology-checkbox-group">
+        <!-- TODO: refactor to use multi-select
         <span>key terminology</span>
         <label for="adhhar"> الأظهر <input type="checkbox" /></label>
         <label for="mashhur"> المشهور <input type="checkbox" /></label>
+        -->
       </div>
     </div>
     <div class={`text-container ${selectedLayout} ${slideIn ? "slidin" : ""}`}>
