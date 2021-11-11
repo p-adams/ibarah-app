@@ -11,7 +11,7 @@
   let selectedCommentaryKey: SelectedCommentaryKey = "mahalli";
   let selectedLayout: Layout = "top-bottom";
   let slideIn = false;
-
+  let advancedSearchIsOpen = false;
   onMount(() => {
     searchFilter.focus();
   });
@@ -56,14 +56,29 @@
     <div class="filter-bar">
       <div class="input-group">
         <div class="search-filter">
+          <span class="search-icon" on:click={() => onSearch()}>
+            <i class="fas fa-search" /></span
+          >
           <input
             bind:this={searchFilter}
             placeholder="search"
             bind:value={searchTerm}
           />
-          <span class="search-icon" on:click={() => onSearch()}>
-            <i class="fas fa-search" /></span
+
+          <div
+            class="advanced-search-icon"
+            on:click={() => (advancedSearchIsOpen = !advancedSearchIsOpen)}
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              ><path
+                d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"
+              /></svg
+            >
+          </div>
         </div>
         <select
           on:change={(e) => onSelectCommentary(e)}
@@ -86,7 +101,7 @@
         </select>
       </div>
       <div class="terminology-checkbox-group">
-        <!-- TODO: refactor to use multi-select
+        <!-- TODO: refactor to render inside input filter dropdown
         <span>key terminology</span>
         <label for="adhhar"> الأظهر <input type="checkbox" /></label>
         <label for="mashhur"> المشهور <input type="checkbox" /></label>
@@ -152,8 +167,16 @@
     flex: 1.5;
   }
   .filter-bar .search-icon {
-    margin-right: 4px;
+    margin-left: 4px;
     color: #4791db;
+  }
+
+  .filter-bar .advanced-search-icon {
+    cursor: pointer;
+  }
+
+  .filter-bar .advanced-search-icon svg path {
+    fill: gray;
   }
   .filter-bar .search-filter input {
     height: 30px;
